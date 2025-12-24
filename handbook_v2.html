@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tile Tycoon: Project Handbook V2</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Pretendard', sans-serif; background-color: #0f172a; color: #e2e8f0; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .nav-btn.active { background-color: #3b82f6; color: white; border-color: #3b82f6; }
+        .nav-btn:hover:not(.active) { background-color: rgba(59, 130, 246, 0.1); border-color: #3b82f6; }
+        
+        .role-card { cursor: pointer; transition: all 0.2s; }
+        .role-card:hover { transform: translateY(-3px); border-color: #60a5fa; }
+        .role-card.active-card { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); }
+        
+        .process-step { cursor: pointer; transition: all 0.2s; }
+        .process-step:hover { transform: scale(1.02); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Timeline */
+        .timeline-item { border-left: 2px solid #475569; padding-left: 20px; padding-bottom: 30px; position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; border-radius: 50%; background: #3b82f6; }
+        .timeline-item:last-child { border-left: none; }
+        
+        /* Tree View */
+        .tree ul { padding-left: 20px; border-left: 1px dashed #475569; margin-left: 5px; }
+        .tree li { position: relative; padding-left: 20px; margin-bottom: 5px; }
+        .tree li::before { content: ""; position: absolute; left: 0; top: 12px; width: 15px; height: 1px; background: #475569; }
+        .folder { color: #facc15; font-weight: bold; }
+        .file { color: #60a5fa; }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="flex flex-col md:flex-row justify-between items-center mb-8 pb-6 border-b border-gray-700">
+            <div>
+                <h1 class="text-3xl md:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-400">
+                    Tile Tycoon
+                </h1>
+                <p class="text-gray-400 mt-2 text-sm">Vibe Coding Project Handbook <span class="text-xs bg-blue-900 px-2 py-0.5 rounded text-blue-200">v2.0</span></p>
+            </div>
+            <div class="mt-4 md:mt-0 flex gap-2">
+                <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 text-xs font-bold border border-slate-600">Project: HIMITU</span>
+                <span class="px-3 py-1 rounded-full bg-teal-900 text-teal-300 text-xs font-bold border border-teal-700">Phase: Prototyping</span>
+            </div>
+        </header>
+
+        <nav class="flex flex-wrap gap-2 mb-8">
+            <button onclick="switchTab('overview')" class="nav-btn active px-4 py-2 md:px-6 md:py-3 rounded-lg border border-gray-700 font-semibold transition-all">
+                🔭 프로젝트 개요
+            </button>
+            <button onclick="switchTab('history')" class="nav-btn px-4 py-2 md:px-6 md:py-3 rounded-lg border border-gray-700 font-semibold transition-all text-yellow-400">
+                📜 연대기 (History)
+            </button>
+            <button onclick="switchTab('team')" class="nav-btn px-4 py-2 md:px-6 md:py-3 rounded-lg border border-gray-700 font-semibold transition-all">
+                👥 팀 & R&R
+            </button>
+            <button onclick="switchTab('tech')" class="nav-btn px-4 py-2 md:px-6 md:py-3 rounded-lg border border-gray-700 font-semibold transition-all">
+                🏗️ 시스템 아키텍처
+            </button>
+            <button onclick="switchTab('process')" class="nav-btn px-4 py-2 md:px-6 md:py-3 rounded-lg border border-gray-700 font-semibold transition-all">
+                ⚙️ 개발 프로세스
+            </button>
+        </nav>
+
+        <div id="overview" class="tab-content active">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 glass-panel rounded-xl p-6">
+                    <h2 class="text-xl font-bold mb-4 text-teal-400">🎮 하이 컨셉 (Revised v9.3)</h2>
+                    <blockquote class="text-xl font-light italic text-gray-300 border-l-4 border-teal-500 pl-4 mb-4">
+                        "전략적 배치로 도시를 성장시키는 <span class="text-white font-bold">하이브리드 타일 타이쿤</span>"
+                    </blockquote>
+                    <p class="text-gray-400 mb-6 leading-relaxed">
+                        기존의 단순 낙하형 테트리스에서 벗어나, <strong>덱 빌딩(상점)</strong>과 <strong>전략적 배치</strong>를 결합했습니다.
+                        건설 대기 시간과 행복도 관리를 통해 '타이쿤'의 깊이를 더하고, <strong>시간 역행(Undo)</strong>으로 퍼즐의 스트레스를 줄였습니다.
+                    </p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                            <h3 class="font-bold text-yellow-400 mb-2">🔥 핵심 변경점 (v9.3)</h3>
+                            <ul class="text-sm space-y-2 text-gray-300 list-disc list-inside">
+                                <li><strong>Falling X → Placement O:</strong> 원하는 위치에 드래그하여 배치</li>
+                                <li><strong>Construction Time:</strong> 배치 후 일정 웨이브가 지나야 완공</li>
+                                <li><strong>Happiness:</strong> 인구와 주거의 균형이 무너지면 패널티</li>
+                            </ul>
+                        </div>
+                        <div class="bg-gray-800 p-4 rounded-lg border border-gray-700">
+                            <h3 class="font-bold text-purple-400 mb-2">💎 주요 재미 요소</h3>
+                            <ul class="text-sm space-y-2 text-gray-300 list-disc list-inside">
+                                <li><strong>Merge:</strong> 4개의 타일을 합쳐 상위 티어 건물로 진화</li>
+                                <li><strong>Synergy:</strong> 주거+상점 인접 시 생산량 폭발</li>
+                                <li><strong>Time Reversal:</strong> 실수하면 10초 전으로 되감기</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel rounded-xl p-6 flex flex-col gap-4">
+                    <h3 class="font-bold text-white border-b border-gray-700 pb-2">📋 Game Specs</h3>
+                    <div class="space-y-4 text-sm">
+                        <div>
+                            <div class="text-gray-500 text-xs uppercase">Genre</div>
+                            <div class="text-white font-semibold">Simulation + Puzzle</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-500 text-xs uppercase">Platform</div>
+                            <div class="text-white font-semibold">HTML5 Web (Mobile Target)</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-500 text-xs uppercase">Target Session</div>
+                            <div class="text-white font-semibold">10 ~ 15 Minutes</div>
+                        </div>
+                        <div>
+                            <div class="text-gray-500 text-xs uppercase">Current Ver</div>
+                            <div class="text-green-400 font-mono font-bold">v9.3 (Prototype)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="history" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                📜 개발 연대기 <span class="text-sm font-normal text-gray-500 bg-gray-800 px-2 py-1 rounded">From Tetris to Tycoon</span>
+            </h2>
+            <div class="glass-panel p-8 rounded-xl">
+                <div class="timeline-item">
+                    <div class="font-bold text-blue-400 text-lg mb-1">12월 11일: 프로젝트의 시작 (v2.3)</div>
+                    <div class="text-sm text-gray-400 mb-2">Initiator: 루나</div>
+                    <div class="bg-gray-800 p-3 rounded text-sm text-gray-300">
+                        <span class="font-bold text-white">"테트리스 타이쿤"</span><br>
+                        • 단순히 블록이 떨어져서 건물이 되는 물리적 결합 시도<br>
+                        • <code>fall()</code>, <code>rotate()</code> 등 전형적인 테트리스 로직 구현
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="font-bold text-green-400 text-lg mb-1">12월 12일: 전략의 추가 (v2.5)</div>
+                    <div class="text-sm text-gray-400 mb-2">Contributor: 수삼</div>
+                    <div class="bg-gray-800 p-3 rounded text-sm text-gray-300">
+                        <span class="font-bold text-white">"무지성 쌓기 방지"</span><br>
+                        • 줄 삭제 시 자원 보너스 획득 로직 추가<br>
+                        • 시각적 피드백(Effect) 강화로 타이쿤적 재미 탐색
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="font-bold text-purple-400 text-lg mb-1">12월 16일: 대격변 (Pivot) (v7.1)</div>
+                    <div class="text-sm text-gray-400 mb-2">Contributor: 루나</div>
+                    <div class="bg-gray-800 p-3 rounded text-sm text-gray-300">
+                        <span class="font-bold text-white">"Tile Tycoon으로 변경"</span><br>
+                        • 낙하 방식 폐기 → <strong>상점(Deck) 구매 & 드래그 배치</strong> 도입<br>
+                        • 피지컬 게임에서 뇌지컬(전략) 게임으로 장르 변경
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="font-bold text-teal-400 text-lg mb-1">12월 19일: 시스템 완성 (v9.3)</div>
+                    <div class="text-sm text-gray-400 mb-2">Current Version</div>
+                    <div class="bg-gray-800 p-3 rounded text-sm text-gray-300">
+                        <span class="font-bold text-white">"타이쿤의 깊이"</span><br>
+                        • <strong>건설 대기(Construction Time)</strong> 및 행복도 시스템 구현<br>
+                        • Worker 애니메이션 등 디테일 추가
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="team" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6">👥 팀 & R&R (Click to View Details)</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div onclick="showRole('susam')" id="card-susam" class="role-card glass-panel rounded-xl p-5 border-t-4 border-blue-500">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="bg-blue-900 p-2 rounded text-xl">👑</div>
+                        <div class="font-bold text-lg">수삼 (Leader)</div>
+                    </div>
+                    <div class="text-xs text-blue-400">Architecture / Core</div>
+                </div>
+
+                <div onclick="showRole('luna')" id="card-luna" class="role-card glass-panel rounded-xl p-5 border-t-4 border-purple-500">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="bg-purple-900 p-2 rounded text-xl">🧠</div>
+                        <div class="font-bold text-lg">루나 (Planner)</div>
+                    </div>
+                    <div class="text-xs text-purple-400">Game Logic / Systems</div>
+                </div>
+
+                <div onclick="showRole('charles')" id="card-charles" class="role-card glass-panel rounded-xl p-5 border-t-4 border-green-500">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="bg-green-900 p-2 rounded text-xl">⚖️</div>
+                        <div class="font-bold text-lg">찰스 (PD)</div>
+                    </div>
+                    <div class="text-xs text-green-400">Balancing / Data</div>
+                </div>
+
+                <div onclick="showRole('seulttu')" id="card-seulttu" class="role-card glass-panel rounded-xl p-5 border-t-4 border-pink-500">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div class="bg-pink-900 p-2 rounded text-xl">🎨</div>
+                        <div class="font-bold text-lg">슬뚜 (Infra)</div>
+                    </div>
+                    <div class="text-xs text-pink-400">UI/UX / Effects</div>
+                </div>
+            </div>
+
+            <div id="role-detail-area" class="glass-panel p-6 rounded-xl bg-slate-900/50 min-h-[200px]">
+                <div class="text-center text-gray-500 py-10">👆 위 카드를 클릭하면 상세 업무 내용과 담당 파일이 표시됩니다.</div>
+            </div>
+        </div>
+
+        <div id="tech" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6">🏗️ 시스템 아키텍처</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4 text-blue-400">📂 Module Structure</h3>
+                    <div class="glass-panel p-6 rounded-xl font-mono text-sm overflow-hidden h-full">
+                        <div class="tree">
+                            <div class="mb-2 text-gray-300">TetrisTycoon/</div>
+                            <ul>
+                                <li><span class="file text-white">index.html</span> <span class="text-gray-500 text-xs ml-2">// 진입점 & 모듈 로드</span></li>
+                                <li><span class="folder">css/</span>
+                                    <ul>
+                                        <li><span class="file">style.css</span> <span class="text-gray-500 text-xs ml-2">// [슬뚜] Tailwind Custom & Animations</span></li>
+                                    </ul>
+                                </li>
+                                <li><span class="folder">js/</span>
+                                    <ul>
+                                        <li><span class="file text-white">main.js</span> <span class="text-gray-500 text-xs ml-2">// [수삼] 게임 초기화 및 루프 시작</span></li>
+                                        <li><span class="folder">config/</span> <span class="text-gray-500 text-xs ml-2">// [찰스] 기획 데이터</span>
+                                            <ul>
+                                                <li><span class="file">GameConfig.js</span></li>
+                                                <li><span class="file">BuildingData.js</span></li>
+                                            </ul>
+                                        </li>
+                                        <li><span class="folder">core/</span> <span class="text-gray-500 text-xs ml-2">// [수삼] 핵심 엔진</span>
+                                            <ul>
+                                                <li><span class="file">GameLoop.js</span></li>
+                                                <li><span class="file text-yellow-400">TimeMachine.js</span></li>
+                                                <li><span class="file">StateManager.js</span></li>
+                                            </ul>
+                                        </li>
+                                        <li><span class="folder">systems/</span> <span class="text-gray-500 text-xs ml-2">// [루나] 게임 로직</span>
+                                            <ul>
+                                                <li><span class="file">GridSystem.js</span></li>
+                                                <li><span class="file">SynergySystem.js</span></li>
+                                                <li><span class="file">EconomySystem.js</span></li>
+                                            </ul>
+                                        </li>
+                                        <li><span class="folder">ui/</span> <span class="text-gray-500 text-xs ml-2">// [슬뚜] 시각화</span>
+                                            <ul>
+                                                <li><span class="file">UIManager.js</span></li>
+                                                <li><span class="file">EffectManager.js</span></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex flex-col gap-6">
+                    <div class="glass-panel p-5 rounded-xl">
+                        <h3 class="font-bold text-white mb-2">💻 Tech Stack</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                                <span class="text-gray-400">Core Language</span>
+                                <span class="font-mono text-yellow-400">Vanilla JS (ES6 Modules)</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                                <span class="text-gray-400">Styling</span>
+                                <span class="font-mono text-cyan-400">Tailwind CSS (CDN)</span>
+                            </div>
+                            <div class="flex justify-between items-center border-b border-gray-700 pb-2">
+                                <span class="text-gray-400">State Mgmt</span>
+                                <span class="font-mono text-green-400">Circular Buffer (TimeMachine)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-panel p-5 rounded-xl bg-blue-900/20 border-blue-500/30">
+                        <h3 class="font-bold text-blue-300 mb-2">💡 Why this stack?</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            프로토타입 단계에서 <strong>빌드 과정 없는(No-Build)</strong> 환경을 구축하여 
+                            비개발직군 팀원도 VS Code만 있으면 즉시 코드를 수정하고 결과를 확인할 수 있게 함.
+                            <br><br>
+                            특히 <strong>ES6 Modules</strong>를 사용하여 역할을 명확히 분리함으로써, 
+                            4인이 동시에 작업해도 충돌을 최소화함.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="process" class="tab-content">
+            <h2 class="text-2xl font-bold mb-6 text-center">⚙️ Notion 협업 워크플로우</h2>
+            <p class="text-center text-gray-500 mb-8">각 단계를 클릭하여 상세 가이드를 확인하세요.</p>
+            
+            <div class="flex flex-col md:flex-row gap-4 justify-between items-stretch mb-8">
+                <div onclick="showProcess('backlog')" class="process-step flex-1 bg-gray-800 p-4 rounded-lg border-l-4 border-gray-500 relative hover:bg-gray-700">
+                    <div class="absolute -top-3 -left-3 bg-gray-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">1</div>
+                    <h3 class="font-bold text-lg mb-1">💡 Backlog</h3>
+                    <p class="text-xs text-gray-400">아이디어 등록</p>
+                </div>
+
+                <div class="hidden md:flex items-center text-gray-600">➜</div>
+
+                <div onclick="showProcess('prompting')" class="process-step flex-1 bg-gray-800 p-4 rounded-lg border-l-4 border-blue-500 relative hover:bg-gray-700">
+                    <div class="absolute -top-3 -left-3 bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">2</div>
+                    <h3 class="font-bold text-lg mb-1">🤖 Prompting</h3>
+                    <p class="text-xs text-gray-400">AI 작업 진행</p>
+                </div>
+
+                <div class="hidden md:flex items-center text-gray-600">➜</div>
+
+                <div onclick="showProcess('review')" class="process-step flex-1 bg-gray-800 p-4 rounded-lg border-l-4 border-purple-500 relative hover:bg-gray-700">
+                    <div class="absolute -top-3 -left-3 bg-purple-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">3</div>
+                    <h3 class="font-bold text-lg mb-1">📝 Review</h3>
+                    <p class="text-xs text-gray-400">코드 & 프롬프트 공유</p>
+                </div>
+
+                <div class="hidden md:flex items-center text-gray-600">➜</div>
+
+                <div onclick="showProcess('merge')" class="process-step flex-1 bg-gray-800 p-4 rounded-lg border-l-4 border-green-500 relative hover:bg-gray-700">
+                    <div class="absolute -top-3 -left-3 bg-green-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">4</div>
+                    <h3 class="font-bold text-lg mb-1">✅ Merged</h3>
+                    <p class="text-xs text-gray-400">메인 반영</p>
+                </div>
+            </div>
+
+            <div id="process-detail" class="glass-panel p-6 rounded-xl bg-gray-900 border border-gray-700 min-h-[150px]">
+                <div class="text-center text-gray-500 py-8">👆 위 프로세스 단계를 클릭하면 상세 가이드가 표시됩니다.</div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // R&R Data
+        const roleData = {
+            susam: {
+                title: "수삼 (Leader) - Architecture & Core",
+                tasks: [
+                    "⏱️ <b>Time Machine 엔진 구현:</b> <code>TimeMachine.js</code>에서 Circular Buffer를 사용해 최근 10초간의 <code>gameState</code> 스냅샷 저장/복구 로직 작성.",
+                    "🔄 <b>Game Loop 관리:</b> 건설 페이즈(90s)와 관찰 페이즈(30s)의 상태 전환 로직 통제.",
+                    "🐙 <b>Infra:</b> GitHub Repository 관리 및 Pull Request 병합(Merge)."
+                ],
+                files: ["js/core/TimeMachine.js", "js/core/GameLoop.js", "js/main.js"]
+            },
+            luna: {
+                title: "루나 (Planner) - Game Logic",
+                tasks: [
+                    "🏗️ <b>시너지 시스템 구현:</b> <code>SynergySystem.js</code>에서 인접한 타일(주택-상점 등) 감지 및 생산량 보너스 계산 로직 작성.",
+                    "🏘️ <b>그리드 로직:</b> 타일 배치 가능 여부 확인(Collision Check) 및 배치 로직.",
+                    "🧪 <b>기획 검증:</b> AI를 통해 기획 의도가 코드에 반영되었는지 테스트."
+                ],
+                files: ["js/systems/SynergySystem.js", "js/systems/GridSystem.js", "js/systems/EconomySystem.js"]
+            },
+            charles: {
+                title: "찰스 (PD) - Data & Balancing",
+                tasks: [
+                    "📊 <b>데이터 JSON화:</b> 기획서의 건물 스펙, 비용, 티어별 수치를 <code>BuildingData.js</code>에 상수로 정의.",
+                    "⚖️ <b>밸런스 튜닝:</b> 게임 플레이 후 자원 생산량/소비량 수치 미세 조정.",
+                    "🐞 <b>QA:</b> 버그 리포팅 및 난이도 조절 제안."
+                ],
+                files: ["js/config/GameConfig.js", "js/config/BuildingData.js"]
+            },
+            seulttu: {
+                title: "슬뚜 (Infra) - UI/UX & Visuals",
+                tasks: [
+                    "🎨 <b>UI 구현:</b> Tailwind CSS를 사용하여 자원바, 팝업, 버튼 등 인터페이스 제작.",
+                    "✨ <b>이펙트 연출:</b> 건설 완료 시 파티클, 행복도 변화 시 텍스트 플로팅 효과 등 시각적 피드백 구현.",
+                    "📱 <b>반응형 대응:</b> 모바일 화면에서도 UI가 깨지지 않도록 조정."
+                ],
+                files: ["js/ui/UIManager.js", "js/ui/EffectManager.js", "css/style.css"]
+            }
+        };
+
+        // Process Data
+        const processData = {
+            backlog: {
+                title: "💡 Backlog (아이디어 단계)",
+                content: `
+                    <ul class="list-disc list-inside space-y-2 text-gray-300">
+                        <li><b>누가:</b> 모든 팀원</li>
+                        <li><b>무엇을:</b> 기획서나 회의에서 나온 기능을 '할 일' 단위로 쪼개서 노션 'Backlog' 컬럼에 등록합니다.</li>
+                        <li><b>Ex:</b> "주택 건물 데이터 추가", "시간 역행 버튼 UI 만들기"</li>
+                    </ul>`
+            },
+            prompting: {
+                title: "🤖 Prompting (개발 단계)",
+                content: `
+                    <ul class="list-disc list-inside space-y-2 text-gray-300">
+                        <li><b>누가:</b> 담당자 (예: 루나)</li>
+                        <li><b>무엇을:</b> Cursor나 Claude를 열고 AI에게 코딩을 시킵니다.</li>
+                        <li><b>상태 변경:</b> 노션 카드를 <code>In Progress</code>로 옮깁니다.</li>
+                        <li><b>Tip:</b> "한 번에 파일 하나만 건드리는 프롬프트"가 성공률이 높습니다.</li>
+                    </ul>`
+            },
+            review: {
+                title: "📝 Code Review (공유 단계)",
+                content: `
+                    <ul class="list-disc list-inside space-y-2 text-yellow-100 bg-yellow-900/20 p-4 rounded">
+                        <li><b>누가:</b> 담당자 → 전체</li>
+                        <li><b>무엇을:</b> AI가 짜준 코드가 정상 작동하면 노션 'Code Review' 컬럼으로 옮깁니다.</li>
+                        <li><b>★ 필수:</b> 카드 내부에 <strong>[생성된 코드 파일]</strong> 뿐만 아니라 <strong>[성공한 프롬프트]</strong>를 꼭 적어주세요. (팀 학습용)</li>
+                    </ul>`
+            },
+            merge: {
+                title: "✅ Merged (반영 단계)",
+                content: `
+                    <ul class="list-disc list-inside space-y-2 text-green-100 bg-green-900/20 p-4 rounded">
+                        <li><b>누가:</b> 수삼 (Leader)</li>
+                        <li><b>무엇을:</b> 공유된 코드를 <code>main.js</code>나 핵심 로직에 통합하고 GitHub에 Push합니다.</li>
+                        <li><b>완료:</b> 노션 카드를 <code>Done</code>으로 옮깁니다.</li>
+                    </ul>`
+            }
+        };
+
+        // Tab Switching
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Role Interaction
+        function showRole(roleId) {
+            // Highlight Card
+            document.querySelectorAll('.role-card').forEach(el => el.classList.remove('active-card'));
+            document.getElementById('card-' + roleId).classList.add('active-card');
+
+            // Render Detail
+            const data = roleData[roleId];
+            const tasksHtml = data.tasks.map(t => `<li class="mb-2">${t}</li>`).join('');
+            const filesHtml = data.files.map(f => `<span class="bg-slate-700 text-blue-200 px-2 py-1 rounded text-xs font-mono mr-2">${f}</span>`).join('');
+
+            const html = `
+                <div class="animate-[fadeIn_0.3s_ease-in-out]">
+                    <h3 class="text-xl font-bold text-white mb-4 border-b border-gray-700 pb-2">${data.title}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2">
+                            <h4 class="font-bold text-gray-400 mb-2 text-sm uppercase">📋 담당 업무 상세</h4>
+                            <ul class="list-none text-gray-300 text-sm">
+                                ${tasksHtml}
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-gray-400 mb-2 text-sm uppercase">📂 주요 관리 파일</h4>
+                            <div class="flex flex-wrap gap-2">
+                                ${filesHtml}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('role-detail-area').innerHTML = html;
+        }
+
+        // Process Interaction
+        function showProcess(stepId) {
+            const data = processData[stepId];
+            const html = `
+                <div class="animate-[fadeIn_0.3s_ease-in-out]">
+                    <h3 class="text-xl font-bold text-blue-400 mb-3">${data.title}</h3>
+                    <div class="text-sm">
+                        ${data.content}
+                    </div>
+                </div>
+            `;
+            document.getElementById('process-detail').innerHTML = html;
+        }
+    </script>
+</body>
+</html>

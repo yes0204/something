@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vibe Coding Protocol</title>
+    <style>
+        :root {
+            /* 세련된 컬러 팔레트 (Slate & Indigo) */
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --primary-text: #1e293b;
+            --secondary-text: #64748b;
+            --accent-color: #6366f1; /* Indigo */
+            --accent-hover: #4f46e5;
+            --danger-bg: #fef2f2;
+            --danger-text: #ef4444;
+            --success-bg: #f0fdf4;
+            --success-text: #22c55e;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--primary-text);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 850px;
+            width: 100%;
+        }
+
+        /* --- Header Section --- */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .badge {
+            display: inline-block;
+            background-color: #e0e7ff;
+            color: var(--accent-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            margin: 0 0 15px 0;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.15rem;
+            color: var(--secondary-text);
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* --- Tab Navigation --- */
+        .tabs-container {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 8px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--secondary-text);
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--primary-text);
+        }
+
+        .tab-btn.active {
+            background-color: var(--card-bg);
+            color: var(--accent-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* --- Content Card --- */
+        .content-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+            min-height: 450px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: var(--primary-text);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .concept-box {
+            background: linear-gradient(to right, #f8fafc, #f1f5f9);
+            border-left: 4px solid var(--accent-color);
+            padding: 24px;
+            border-radius: 0 12px 12px 0;
+            margin-bottom: 40px;
+        }
+
+        .concept-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--accent-color);
+            font-weight: 800;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .concept-text {
+            font-size: 1.05rem;
+            color: var(--primary-text);
+            font-weight: 500;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            color: var(--secondary-text);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 40px 0 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        h3::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        /* --- Action Grid --- */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .action-card {
+            background-color: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-color);
+        }
+
+        .action-icon {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .action-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            color: var(--primary-text);
+            display: block;
+        }
+
+        .action-desc {
+            font-size: 0.95rem;
+            color: var(--secondary-text);
+            line-height: 1.6;
+        }
+
+        .example-box {
+            margin-top: 15px;
+            background-color: #f8fafc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            border: 1px dashed var(--border-color);
+        }
+        
+        .code-snippet {
+            font-family: 'Consolas', monospace;
+            color: #d63384;
+            background: rgba(0,0,0,0.03);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .tabs-container { flex-direction: column; padding: 10px; }
+            .content-card { padding: 30px 20px; }
+            .action-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div class="badge">Sam Altman's Method</div>
+        <h1>Analog Rigor, Digital Vibe</h1>
+        <div class="subtitle">생각을 명확히 하는 <strong>'글쓰기 시스템'</strong>을<br>AI 프롬프트 엔지니어링에 적용하는 프로토콜</div>
+    </header>
+
+    <div class="tabs-container">
+        <button class="tab-btn active" onclick="openTab(event, 'step1')">
+            <span>📐</span> 1. 설계 (Architect)
+        </button>
+        <button class="tab-btn" onclick="openTab(event, 'step2')">
+            <span>✂️</span> 2. 편집 (Editor)
+        </button>
+        <button class="tab-btn" onclick="openTab(event, 'step3')">
+            <span>🔮</span> 3. 정제 (Synthesizer)
+        </button>
+    </div>
+
+    <div class="content-card">
+        
+        <div id="step1" class="tab-content active">
+            <h2>The Spiral Notebook <span style="font-weight:400; font-size:1.2rem; margin-left:10px; color:#94a3b8;">물리적 분할과 설계</span></h2>
+            
+            <div class="concept-box">
+                <span class="concept-title">Core Philosophy</span>
+                <div class="concept-text">
+                    "종이를 찢어서 바닥에 늘어놓고 봅니다."<br>
+                    <span style="font-size:0.9rem; color:var(--secondary-text); margin-top:5px; display:block;">AI 오류의 대부분은 인간의 '뒤엉킨 사고(Spaghetti Thinking)'에서 비롯됩니다. 물리적으로 종이를 찢는 행위는 AI의 '컨텍스트 윈도우'를 모듈화하는 과정과 일치합니다.</span>
+                </div>
+            </div>
+
+            <h3>Actionable Protocol</h3>
+            <div class="action-grid">
+                <div class="action-card">
+                    <span class="action-icon">✍️</span>
+                    <span class="action-title">Hand-drawn Logic</span>
+                    <div class="action-desc">
+                        타이핑 전, <strong>노트에 손으로</strong> 다이어그램을 그리세요. 손의 느린 속도가 논리적 비약을 막아줍니다. 이 구조도가 프롬프트의 '뼈대'가 됩니다.
+                    </div>
+                </div>
+                <div class="action-card">
+                    <span class="action-icon">🧩</span>
+                    <span class="action-title">Ripping Pages</span>
+                    <div class="action-desc">
+                        거대한 프로젝트를 한 번에 입력하지 마세요. 노트 한 장을 찢듯 과업을 분리하세요.
+                        <div class="example-box">
+                            <strong>Order:</strong> [DB Schema] → [API Logic] → [UI Component]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="step2" class="tab-content">
+            <h2>The Editor-in-Chief <span style="font-weight:400; font-size:1.2rem; margin-left:10px; color:#94a3b8;">엄밀함과 반복 수정</span></h2>
+
+            <div class="concept-box">
+                <span class="concept-title">Core Philosophy</span>
+                <div class="concept-text">
+                    "나는 작가가 아니라 편집자다."<br>
+                    <span style="font-size:0.9rem; color:var(--secondary-text); margin-top:5px; display:block;">AI가 생성한 코드는 '완성품'이 아닌 '초안(Draft)'입니다. 우리의 역할은 보안과 효율성이라는 엄격한 잣대(Rigor)로 이를 갈고 닦는 것입니다.</span>
+                </div>
+            </div>
+
+            <h3>Actionable Protocol</h3>
+            <div class="action-grid">
+                <div class="action-card">
+                    <span class="action-icon">⚖️</span>
+                    <span class="action-title">Strict Constraints</span>
+                    <div class="action-desc">
+                        '알아서 잘' 대신 명확한 제약조건을 명시하세요.
+                        <div class="example-box">
+                            "PostgreSQL <span class="code-snippet">pgvector</span> 사용 필수, 쿼리 타임아웃 5초 설정"
+                        </div>
+                    </div>
+                </div>
+                <div class="action-card">
+                    <span class="action-icon">🔍</span>
+                    <span class="action-title">Reviewer Mode</span>
+                    <div class="action-desc">
+                        코드가 '작동'하는지는 중요하지 않습니다. '안전'한지가 중요합니다.
+                        <div class="example-box">
+                            "이 코드에 SQL Injection 취약점은 없는가? PEP8 스타일인가?" 되물으세요.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="step3" class="tab-content">
+            <h2>Externalized Thinking <span style="font-weight:400; font-size:1.2rem; margin-left:10px; color:#94a3b8;">PKM과 프롬프트의 연결</span></h2>
+
+            <div class="concept-box">
+                <span class="concept-title">Core Philosophy</span>
+                <div class="concept-text">
+                    "압축이 곧 지능이다."<br>
+                    <span style="font-size:0.9rem; color:var(--secondary-text); margin-top:5px; display:block;">평소의 메모(PKM)는 AI에게 줄 '고품질 학습 데이터'입니다. 내 언어로 정리된 지식이 없다면, AI에게 던질 질문의 깊이도 얕아집니다.</span>
+                </div>
+            </div>
+
+            <h3>Actionable Protocol</h3>
+            <div class="action-grid">
+                <div class="action-card">
+                    <span class="action-icon">🗃️</span>
+                    <span class="action-title">Obsidian as Prompt DB</span>
+                    <div class="action-desc">
+                        자주 쓰는 코드 패턴과 프로젝트 맥락을 Obsidian에 정리해두세요. 이 <strong>'지식 블록'</strong>을 복사해 넣으면 환각(Hallucination)이 사라집니다.
+                    </div>
+                </div>
+                <div class="action-card">
+                    <span class="action-icon">🎯</span>
+                    <span class="action-title">Define the 'Vibe'</span>
+                    <div class="action-desc">
+                        '느낌'을 '정의(Definition)'로 치환하세요.
+                        <div class="example-box">
+                            "지난번 정리한 [보안성 검토 가이드라인 V1.2]의 3항을 기준으로 리팩토링해줘."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer style="text-align: center; margin-top: 50px; color: #94a3b8; font-size: 0.9rem;">
+        Inspired by Sam Altman's "Writing as Thinking" • Designed for Vibe Coding
+    </footer>
+</div>
+
+<script>
+    function openTab(evt, stepName) {
+        var i, tabcontent, tablinks;
+        
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+            tabcontent[i].classList.remove("active");
+        }
+        
+        tablinks = document.getElementsByClassName("tab-btn");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+        
+        document.getElementById(stepName).style.display = "block";
+        setTimeout(() => {
+            document.getElementById(stepName).classList.add("active");
+        }, 10);
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+</body>
+</html>
